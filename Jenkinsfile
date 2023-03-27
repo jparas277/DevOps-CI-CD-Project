@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds')
-    REMOTE_SERVER = '52.203.37.31'
+    REMOTE_SERVER = '3.88.141.67'
     REMOTE_USER = 'ubuntu'            
   }
 
@@ -19,59 +19,12 @@ pipeline {
 
    // Build Java application
 
-    stage('Maven Build') {
-      steps {
-        sh 'mvn clean install'
-      }
-
-     // Post building archive Java application
-
-      post {
-        success {
-          archiveArtifacts artifacts: '**/target/*.jar'
-        }
-      }
-    }
-
-  // Test Java application
-
-    stage('Maven Test') {
-      steps {
-        sh 'mvn test'
-      }
-    }
-
    // Build docker image in Jenkins
 
-    stage('Build Docker Image') {
-
-      steps {
-        sh 'docker build -t javawebapp:latest .'
-        sh 'docker tag javawebapp jparas/javawebapp:latest'
-      }
-    }
-
-   // Login to DockerHub before pushing docker Image
-
-    stage('Login to DockerHub') {
-      steps {
-        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u    $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-      }
-    }
 
    // Push image to DockerHub registry
 
-    stage('Push Image to dockerHUb') {
-      steps {
-        sh 'docker push jparas/javawebapp:latest'
-      }
-      post {
-        always {
-          sh 'docker logout'
-        }
-      }
 
-    }
 
    // Pull docker image from DockerHub and run in EC2 instance 
 
@@ -86,5 +39,4 @@ pipeline {
         }
       }
     }
-  }
-}
+
