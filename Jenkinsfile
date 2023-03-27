@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds')
-    REMOTE_SERVER = 'ec2-3-87-66-168.compute-1.amazonaws.com'
+    REMOTE_SERVER = '3.87.66.168'
     REMOTE_USER = 'ec2-user'            
   }
 
